@@ -89,9 +89,21 @@
     
 }
 
+@media (max-width: 680px) {    
+
+    .techs__list {
+    display: grid;
+    grid-template-columns: repeat(4, 84px);
+    gap: 10px;
+    margin: 50px 0 70px;
+} 
+    
+}
+
 @media (max-width: 500px) {
     .techs {
         padding-top: 70px;
+        background-color: #202020;
     }
     .techs__title {
         width: calc(100% - (18px * 2));
@@ -110,7 +122,6 @@
         text-align: center;
         letter-spacing: -0.04em;
     }
-
     .techs__list {
         display: grid;
         grid-template-columns: repeat(2, 84px);

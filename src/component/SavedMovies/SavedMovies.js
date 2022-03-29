@@ -8,7 +8,6 @@ function SavedMovies() {
         <section className="movies">
             <SearchForm/>
             <MoviesCardList/>
-            <button className="movies__button">Еще</button>
         </section>
     )
 }

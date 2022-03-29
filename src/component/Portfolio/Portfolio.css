@@ -57,7 +57,7 @@
     }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 600px) {
     .portfolio {
         width: calc(100% - (14px * 2));
     }    

@@ -110,6 +110,13 @@
     }
 }
 
+@media (max-width: 720px) {
+    .about-me__description {
+        width: 50%;
+        margin: 0 0 40px;
+    }
+}
+
 @media (max-width: 600px) {
     .about-me {
         width: calc(100% - (14px * 2));        

@@ -21,14 +21,18 @@ function Header () {
             <Routes>
                 <Route path='/' element={
                     <header className='header'>
-                        <img className='header__logo' alt='logo' src={headerLogo}/>
+                        <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
                         <Link className='header__link' to="/signin">Регистрация</Link>
                         <Link className='header__button' to="/signup">Войти</Link>
                     </header>
                 }/>
                 <Route path='/movies' element={
                     <header className='header'>
-                    <img className='header__logo' alt='logo' src={headerLogo}/>
+                    <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
                     <button className='header__burger' type="button" onClick={openNavigation}/>
                     <Navigation 
                         isOpen={isActive} 
@@ -37,7 +41,9 @@ function Header () {
                 }/>
                 <Route path='/saved-movies' element={
                     <header className='header'>
-                    <img className='header__logo' alt='logo' src={headerLogo}/>
+                    <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
                     <button className='header__burger' type="button" onClick={openNavigation}/>
                     <Navigation 
                         isOpen={isActive} 
@@ -46,7 +52,9 @@ function Header () {
                 }/>
                 <Route path='/profile' element={
                     <header className='header'>
-                    <img className='header__logo' alt='logo' src={headerLogo}/>
+                    <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
                     <button className='header__burger' type="button" onClick={openNavigation}/>
                     <Navigation 
                         isOpen={isActive} 
@@ -55,12 +63,16 @@ function Header () {
                 }/>
                 <Route path='/signin' element={
                     <header className='header header_alt'>
-                        <img className='header__logo' alt='logo' src={headerLogo}/>
+                        <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
                     </header>
                 }/>
                 <Route path='/signup' element={
                     <header className='header header_alt'>
-                        <img className='header__logo' alt='logo' src={headerLogo}/>
+                        <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
                     </header>
                 }/>
             </Routes>  

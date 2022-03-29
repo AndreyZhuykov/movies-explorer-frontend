@@ -6,7 +6,7 @@ function AboutMe() {
     return(
         <div className='about-me' id='about-me'>
             <h2 className='about-me__title'>Студент</h2>
-            <img className='about-me__photo' src={Photo} alt='/'/>
+            <img className='about-me__photo' src={Photo} alt='Персональное фото'/>
             <h3 className='about-me__name'>Виталий</h3>
             <p className='about-me__job'>Фронтенд-разработчик, 30 лет</p>
             <p className='about-me__description'>Я родился и живу в Саратове, закончил факультет экономики СГУ.
