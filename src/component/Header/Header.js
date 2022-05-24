@@ -5,8 +5,9 @@ import headerLogo from '../../images/logo.svg'
 import Navigation from '../Navigation/Navigation';
 
 
-function Header () {
+function Header(props) {
     const [isActive, setIsActive] = useState(false);
+    
 
     function openNavigation() {
         setIsActive(true);
@@ -19,14 +20,27 @@ function Header () {
 
     return (
             <Routes>
-                <Route path='/' element={
-                    <header className='header'>
+                <Route path='/' element={<>
+                    {!props.isLoggedIn ? 
+                        <header className='header'>
                         <a href='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
                         </a>
-                        <Link className='header__link' to="/signin">Регистрация</Link>
-                        <Link className='header__button' to="/signup">Войти</Link>
-                    </header>
+                        <Link className='header__link' to="/signup">Регистрация</Link>
+                        <Link className='header__button' to="/signin">Войти</Link>
+                        </header> 
+                        :
+                        <header className='header'>
+                        <a href='/'>
+                            <img className='header__logo' alt='Логотип' src={headerLogo}/>
+                        </a>
+                        <button className='header__burger' type="button" onClick={openNavigation}/>
+                        <Navigation 
+                            isOpen={isActive} 
+                            onClose={closeNavigation}/>
+                        </header>
+                }
+                </>
                 }/>
                 <Route path='/movies' element={
                     <header className='header'>

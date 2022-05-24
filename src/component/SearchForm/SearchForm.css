@@ -49,6 +49,7 @@
     background-color: #4286f4d5;
 }
 
+
 @media (max-width: 768px) {
     .search-form {
         width: calc(100% - (30px * 2));

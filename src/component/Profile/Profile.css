@@ -57,6 +57,10 @@
     transition: .5s;
 }
 
+.profile__button:disabled {
+    color: rgb(153, 153, 153);
+}
+
 .profile__button:hover{
     color: rgba(255, 255, 255, 0.747);
 }

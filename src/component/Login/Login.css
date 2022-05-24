@@ -59,6 +59,10 @@
     background-color: #4286f4a8;
 }
 
+.login__button:disabled{
+    background-color: #1c3a69;
+}
+
 .login__text {
     margin: 16px 0 70px 0;
     font-weight: 400;

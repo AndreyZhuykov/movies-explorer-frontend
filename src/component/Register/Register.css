@@ -57,6 +57,11 @@
     background-color: #4286f4d5;
 }
 
+.register__button:disabled {
+    background-color: #1c3a69;
+
+}
+
 .register__text {
     margin: 16px 0 70px 0;
     font-weight: 400;
@@ -73,10 +78,15 @@
 }
 
 .register__span {
+    display: none;
     font-weight: 400;
     font-size: 10px;
     line-height: 12px;
     color: #EE3465;
+}
+
+.register__span_active {
+    display: block;
 }
 
 @media (max-width: 768px) {
