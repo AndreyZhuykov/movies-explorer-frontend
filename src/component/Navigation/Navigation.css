@@ -1,0 +1,123 @@
+.navigation {
+    display: flex;
+    align-items: center;
+}
+
+.navigation__link {
+    margin: 0 20px 0 auto;
+    text-decoration: none;
+    color: #fff;
+    font-size: 12px;
+    transition: .5s;
+    font-weight: 500;
+}
+
+.navigation__link_main {
+    display: none;
+}
+
+.navigation__link:hover {
+    cursor: pointer;
+    color: #3DDC84;
+}
+
+.navigation__button {
+    display: flex;
+    align-items: center;
+    padding: 0 12px 0 31px;
+    text-decoration: none;
+    height: 32px;
+    margin: 0 0 0 30px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 16px;
+    background-color: inherit;
+    border: 2px solid rgba(170, 170, 170, 0.205);
+    border-radius: 50px;
+    cursor: pointer;
+    background-image: url(../../images/icon.svg);
+    background-repeat: no-repeat;
+    background-position: 12px 8px;
+    transition: .5s;
+}
+
+.navigation__button:hover {
+    color: #3DDC84;
+    border: 2px solid #3DDC84;
+    background-image: url(../../images/icon-hover.svg);
+}
+
+.navigation__icon:hover {
+    width: 12px;
+    height: 14px;
+    background-image: url(../../images/icon-hover.svg);
+}
+
+.navigation__exit {
+    padding: 0;
+    margin: 22px 22px 0 auto;
+    width: 22px;
+    height: 22px;
+    display: none;
+    border: none;
+    background-color: inherit;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .navigation {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        top: 0;
+        width: 520px;
+        height: 1024px;
+        background-color: #202020;
+    }
+
+    .navigation_active{
+        display: flex;
+    }
+
+    .navigation__link {
+        margin: 0 auto 24px;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .navigation__link:focus {
+        border-bottom: 2px solid #fff;
+    }
+
+    .navigation__link_main {
+        display: inline;
+        margin: 105px 0 24px 0;
+    }
+
+    .navigation__button {
+        margin: auto 0 90px;
+    }
+
+    .navigation__exit {
+        display: block;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .navigation {
+        width: 100%;
+        height: 780px;
+    }
+
+    .navigation__button {
+        margin: 444px auto 0;
+       
+    }
+}
