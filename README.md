@@ -1,5 +1,5 @@
 # Диплом
 
-## Available Scripts
+## Ссылка
 
 https://movie.nomoredomains.xyz/
