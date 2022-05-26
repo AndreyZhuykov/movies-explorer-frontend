@@ -11,11 +11,10 @@ function MoviesCard(props) {
     );
 
     const userSaveMovie = Object.values(props.saveMovies).filter(
-        (m) => m.movieId === props.movie.id
+        (m) => 
+            m.movieId === props.movie.id
+        
     )[0];
-
-    console.log(props.saveMovies)
-
     const cardLikeButtonClassName = (
         `movies-card__button ${isMovieSave ? 'movies-card__button_active' : ' '}`
     )
@@ -49,13 +48,13 @@ function MoviesCard(props) {
     } 
 
     function handleDeleteMovie(e) {
-        e.preventDefault();
-        if (isMovieSave) {
-            props.deleteMovie(userSaveMovie)
-        }
         props.deleteMovie(props.movie);
     }
 
+    function handleDeleteSaveMovie(e) {
+        props.deleteMovie(userSaveMovie);
+
+    }
 
     React.useEffect(() => {
         if(url.pathname === '/movies') {
@@ -66,7 +65,7 @@ function MoviesCard(props) {
     return(
     <>
         <article className="movies-card">
-            {urlState ? <button className={cardLikeButtonClassName} onClick={isMovieSave ? handleDeleteMovie : handleSaveMovie}/> : <button className='movies-card__delete' onClick={handleDeleteMovie}/>}
+            {urlState ? <button className={cardLikeButtonClassName} onClick={isMovieSave ? handleDeleteSaveMovie : handleSaveMovie}/> : <button className='movies-card__delete' onClick={handleDeleteMovie}/>}
             <h3 className="movies-card__title">{props.movie.nameRU}</h3>
             <time className="movies-card__time">{props.movie.duration}м</time>   
             <a href={props.movie.trailerLink} target='_blank' rel="noreferrer">           

@@ -166,9 +166,9 @@ function App() {
         )
     } 
     function deleteMovie(data) {
+        console.log(data)
         setIsLoading(true)
         mainApi.deleteMovie(data).then(() => {
-            console.log(data)
             updateSaveMovies(saveMovies.filter((m) => m._id !== data._id))
             updateFilterSaveMovies(filterSaveMovies.filter((m) => m._id !== data._id))
         }).catch((err) => {
