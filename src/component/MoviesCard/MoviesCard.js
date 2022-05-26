@@ -12,7 +12,9 @@ function MoviesCard(props) {
 
     const userSaveMovie = Object.values(props.saveMovies).filter(
         (m) => m.movieId === props.movie.id
-      )[0];
+    )[0];
+
+    console.log(props.saveMovies)
 
     const cardLikeButtonClassName = (
         `movies-card__button ${isMovieSave ? 'movies-card__button_active' : ' '}`
@@ -43,17 +45,15 @@ function MoviesCard(props) {
             movie.nameEN = movie.nameRU;
         }
 
-        if(!isMovieSave){
-            props.saveMovie(movie);
-        } 
-
+        props.saveMovie(movie);
     } 
 
     function handleDeleteMovie(e) {
         e.preventDefault();
-        if(!isMovieSave) {
-            props.deleteMovie(props.movie);
-        } props.deleteMovie(userSaveMovie)
+        if (isMovieSave) {
+            props.deleteMovie(userSaveMovie)
+        }
+        props.deleteMovie(props.movie);
     }
 
 
