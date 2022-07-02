@@ -1,32 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+
 
 
 function Profile(props) {
     
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-
+    const [name, setName] = React.useState('')
+    const [email, setEmail] = React.useState('')
     const [isEmailValid, setIsEmailValid] = React.useState(false)
     const [isNameValid, setIsNameValid] = React.useState(false)
+    const currentUser = React.useContext(CurrentUserContext);
+    const validator = require("validator");
 
-    const [buttom, setButton] = React.useState(false)
-
-    const validStatus = isNameValid && isEmailValid 
+    const dataUnchanged = currentUser.email === email && currentUser.name === name;
 
 
+    const validStatus = isNameValid && isEmailValid && !dataUnchanged
 
     function handleName(e) {
         setName(e.target.value)
-        if (e.target.validity.valid === true) {
-            setIsNameValid(true)
-        } else {
+        if (e.target.validity.valid !== true) {
             setIsNameValid(false)
+        } else if (e.target.value === name) {
+            setIsNameValid(false)
+        } else {
+            setIsNameValid(true)
         }
     }
 
     function handleEmail(e) {
         setEmail(e.target.value)
-        if (e.target.validity.valid === true) {
+        if (validator.isEmail(e.target.value) === true) {
             setIsEmailValid(true)
         } else {
             setIsEmailValid(false)
@@ -38,21 +42,20 @@ function Profile(props) {
         props.onProfile(name, email)
     }
 
-    function formValidateCheck(){
-        if(!validStatus){
-            setButton(false)
-        } else {
-            setButton(true)
-        }
-    }
+
+    React.useEffect(() => {
+        setName(currentUser.name);
+        setEmail(currentUser.email);
+    }, [currentUser]); 
 
     return(
         <div className="profile">
             <h2 className="profile__title" >Привет, {props.name}!</h2>
-            <form className="profile__form" onSubmit={handleSubmit} onChange={formValidateCheck}>
-                <input className="profile__input" placeholder="Имя" type='text' onChange={handleName} required></input>
-                <input className="profile__input" placeholder="E-mail" type='email' onChange={handleEmail} required></input>
-                {buttom ? <button className="profile__button" type='submit'>Редактировать</button> : <button className="profile__button" type='submit' disabled>Редактировать</button>}
+            <form className="profile__form" onSubmit={handleSubmit} >
+                <input className="profile__input" placeholder="Имя" type='text' onChange={handleName} required value={name}></input>
+                <input className="profile__input" placeholder="E-mail" type='email' onChange={handleEmail} required value={email}></input>
+                {props.succes ? <span className="profile__span">Успешно!</span> : <span className="profile__span"></span>}
+                {validStatus ? <button className="profile__button" type='submit'>Редактировать</button> : <button className="profile__button" type='submit' disabled>Редактировать</button>}
                 <button className="profile__button profile__button_exit" onClick={props.onSignOut}>Выйти из аккаунта</button> 
                 
             </form>

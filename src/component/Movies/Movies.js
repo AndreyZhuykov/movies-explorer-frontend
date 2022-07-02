@@ -3,6 +3,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import MoreButton from "../MoreButton/MoreButton";
+import Preloader from "../Preloader/Preloader";
 
 function Movies({
     movies,
@@ -15,9 +16,13 @@ function Movies({
     addMovies,
     saveMovie,
     saveMovies,
-    deleteMovie
+    deleteMovie,
+    isLoading
     }) 
-{
+
+{   
+
+
 
     return (
         <section className="movies">

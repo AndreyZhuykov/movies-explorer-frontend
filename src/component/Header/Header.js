@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import headerLogo from '../../images/logo.svg'
 import Navigation from '../Navigation/Navigation';
@@ -23,9 +23,9 @@ function Header(props) {
                 <Route path='/' element={<>
                     {!props.isLoggedIn ? 
                         <header className='header'>
-                        <a href='/'>
+                        <Link to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </a>
+                        </Link>
                         <Link className='header__link' to="/signup">Регистрация</Link>
                         <Link className='header__button' to="/signin">Войти</Link>
                         </header> 
@@ -44,9 +44,9 @@ function Header(props) {
                 }/>
                 <Route path='/movies' element={
                     <header className='header'>
-                    <a href='/'>
+                    <Link to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </a>
+                        </Link>
                     <button className='header__burger' type="button" onClick={openNavigation}/>
                     <Navigation 
                         isOpen={isActive} 
@@ -55,9 +55,9 @@ function Header(props) {
                 }/>
                 <Route path='/saved-movies' element={
                     <header className='header'>
-                    <a href='/'>
+                    <Link to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </a>
+                        </Link>
                     <button className='header__burger' type="button" onClick={openNavigation}/>
                     <Navigation 
                         isOpen={isActive} 
@@ -66,9 +66,9 @@ function Header(props) {
                 }/>
                 <Route path='/profile' element={
                     <header className='header'>
-                    <a href='/'>
+                    <Link to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </a>
+                        </Link>
                     <button className='header__burger' type="button" onClick={openNavigation}/>
                     <Navigation 
                         isOpen={isActive} 
@@ -77,16 +77,16 @@ function Header(props) {
                 }/>
                 <Route path='/signin' element={
                     <header className='header header_alt'>
-                        <a href='/'>
+                        <Link to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </a>
+                        </Link>
                     </header>
                 }/>
                 <Route path='/signup' element={
                     <header className='header header_alt'>
-                        <a href='/'>
+                        <Link to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </a>
+                        </Link>
                     </header>
                 }/>
             </Routes>  

@@ -43,7 +43,7 @@ function MoviesCard(props) {
         if(movie.nameEN === ""){
             movie.nameEN = movie.nameRU;
         }
-
+        console.log(movie)
         props.saveMovie(movie);
     } 
 
