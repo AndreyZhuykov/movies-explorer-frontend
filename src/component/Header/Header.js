@@ -4,11 +4,9 @@ import { useState } from 'react';
 import headerLogo from '../../images/logo.svg'
 import Navigation from '../Navigation/Navigation';
 
-
 function Header(props) {
     const [isActive, setIsActive] = useState(false);
     
-
     function openNavigation() {
         setIsActive(true);
     }

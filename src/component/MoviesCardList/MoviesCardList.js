@@ -4,8 +4,6 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 
 function MoviesCardList(props) {
 
-    const [isFilm, setIsfilm] = React.useState('')
-
     return(
             <div className="movies-card-list">
                 {props.movies

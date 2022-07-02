@@ -3,7 +3,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import MoreButton from "../MoreButton/MoreButton";
-import Preloader from "../Preloader/Preloader";
+import EmptyMovie from "../EmptyMovie/EmptyMovie";
 
 function Movies({
     movies,
@@ -17,12 +17,10 @@ function Movies({
     saveMovie,
     saveMovies,
     deleteMovie,
-    isLoading
     }) 
 
 {   
-
-
+    const emptyMovie = movies.length === 0
 
     return (
         <section className="movies">
@@ -35,14 +33,16 @@ function Movies({
                 short={short}
                 updateShort={updateShort}
             />
-            <MoviesCardList 
+            {emptyMovie? <EmptyMovie/> : 
+                <MoviesCardList 
                 movies={movies}
                 short={short}
                 count={count}     
                 saveMovie={saveMovie}      
                 saveMovies={saveMovies}
                 deleteMovie={deleteMovie}
-            />
+                />
+            }
             <MoreButton
                 movies={movies}
                 count={count}
