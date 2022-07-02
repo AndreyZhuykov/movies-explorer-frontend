@@ -1,0 +1,16 @@
+.empty-movie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+}
+
+.empty-movie__text {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-size: 50px;
+    line-height: 58px;
+    text-align: center;
+    color: #fff;
+}

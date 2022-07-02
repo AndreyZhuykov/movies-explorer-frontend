@@ -1,9 +1,15 @@
 import React from "react";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import FilterCheckbox from "../FilterCheckbox/FilterCheckbox"
+import EmptyMovie from "../EmptyMovie/EmptyMovie";
 
-function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveMovies,deleteMovie}) {
+function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveMovies,deleteMovie, updateShort}) {
 
+
+    const emptyMovie = movies.length === 0
+
+    console.log(emptyMovie)
 
     return (
         <section className="movies">
@@ -12,6 +18,11 @@ function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveM
             updateQuery={updateQuery}
             query={query}
             />
+            <FilterCheckbox
+                short={short}
+                updateShort={updateShort}
+            />
+            {emptyMovie? <EmptyMovie/> : 
             <MoviesCardList
                 movies={movies}
                 short={short}
@@ -19,6 +30,7 @@ function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveM
                 saveMovies={saveMovies}
                 deleteMovie={deleteMovie}
             />
+            }
         </section>
     )
 }

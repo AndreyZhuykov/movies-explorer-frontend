@@ -11,9 +11,10 @@ function MoviesCard(props) {
     );
 
     const userSaveMovie = Object.values(props.saveMovies).filter(
-        (m) => m.movieId === props.movie.id
-      )[0];
-
+        (m) => 
+            m.movieId === props.movie.id
+        
+    )[0];
     const cardLikeButtonClassName = (
         `movies-card__button ${isMovieSave ? 'movies-card__button_active' : ' '}`
     )
@@ -42,20 +43,18 @@ function MoviesCard(props) {
         if(movie.nameEN === ""){
             movie.nameEN = movie.nameRU;
         }
-
-        if(!isMovieSave){
-            props.saveMovie(movie);
-        } 
-
+        console.log(movie)
+        props.saveMovie(movie);
     } 
 
     function handleDeleteMovie(e) {
-        e.preventDefault();
-        if(!isMovieSave) {
-            props.deleteMovie(props.movie);
-        } props.deleteMovie(userSaveMovie)
+        props.deleteMovie(props.movie);
     }
 
+    function handleDeleteSaveMovie(e) {
+        props.deleteMovie(userSaveMovie);
+
+    }
 
     React.useEffect(() => {
         if(url.pathname === '/movies') {
@@ -66,7 +65,7 @@ function MoviesCard(props) {
     return(
     <>
         <article className="movies-card">
-            {urlState ? <button className={cardLikeButtonClassName} onClick={isMovieSave ? handleDeleteMovie : handleSaveMovie}/> : <button className='movies-card__delete' onClick={handleDeleteMovie}/>}
+            {urlState ? <button className={cardLikeButtonClassName} onClick={isMovieSave ? handleDeleteSaveMovie : handleSaveMovie}/> : <button className='movies-card__delete' onClick={handleDeleteMovie}/>}
             <h3 className="movies-card__title">{props.movie.nameRU}</h3>
             <time className="movies-card__time">{props.movie.duration}м</time>   
             <a href={props.movie.trailerLink} target='_blank' rel="noreferrer">           

@@ -143,8 +143,6 @@ export default class Api {
   };
 }
 
-
-
 const mainApi = new Api({
     address: 'https://api.movie.nomoredomains.work',
     headers: {

@@ -3,12 +3,15 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 
 
 function MoviesCardList(props) {
+
+
     return(
             <div className="movies-card-list">
                 {props.movies
                 .filter((movie) => !props.short || movie.duration <= 40)
                 .slice(0, props.count)
                 .map((movie) => {
+                    console.log(movie)
                     return <MoviesCard
                         key={movie.id || movie.movieId}
                         movie={movie}

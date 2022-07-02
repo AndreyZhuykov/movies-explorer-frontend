@@ -1,23 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-
 function Login(props) {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
 
     const [isEmailValid, setIsEmailValid] = React.useState(false)
     const [isPasswordValid, setIsPasswordValid] = React.useState(false)
+    const validator = require("validator");
 
-    const [buttom, setButton] = React.useState(false)
-
-    const validStatus = isEmailValid && isPasswordValid
-
-
+    const validStatus = isEmailValid && isPasswordValid    
 
     function handleMail(e) {
         setEmail(e.target.value)
-        if (e.target.validity.valid === true) {
+        if (validator.isEmail(e.target.value) === true) {
             setIsEmailValid(true)
         } else {
             setIsEmailValid(false)
@@ -38,21 +34,16 @@ function Login(props) {
         props.onAuthorize(email, password)
     }
 
-    function formValidateCheck(){
-        if(!validStatus){
-            setButton(false)
-        } else {
-            setButton(true)
-        }
-    }
-
+    
     return (
         <div className="login">
             <h2 className="login__title">Рады видеть!</h2>
-            <form className="login__form" onChange={formValidateCheck} onSubmit={handleSubmit}>
-                <input className="login__input" placeholder="E-mail" onChange={handleMail} required></input>
-                <input className="login__input" placeholder="Пароль" onChange={handlePassword} required></input>
-                {buttom ? <button className="login__button" type="submit">Войти</button> : <button className="login__button" type="submit" disabled>Войти</button>}
+            <form className="login__form" onSubmit={handleSubmit}>
+                <input className="login__input" type='email' placeholder="E-mail" onChange={handleMail} required ></input>
+                <input className="login__input" type='password' placeholder="Пароль" onChange={handlePassword} required minLength={3}></input>
+                {!props.error ? <span  className="login__span"/> : <span className="login__span login__span_active">Что-то пошло не так...</span>}
+                {isEmailValid ? <span className="login__span"/> : <span className="login__span login__span_active">Введите Email и пароль</span>}
+                {validStatus ? <button className="login__button" type="submit">Войти</button> : <button className="login__button" type="submit" disabled>Войти</button>}
             </form>
             <p className="login__text">Ещё не зарегистрированы?<Link className="login__link" to="/signup">Регистрация</Link></p>
         </div>

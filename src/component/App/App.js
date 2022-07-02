@@ -50,9 +50,11 @@ function App() {
     const [query, setQuery] = React.useState('');
     const [count, setCount] = React.useState(5);
     const [name, setName] = React.useState('');
-    const [isFormError, setIsFormError] = React.useState(false)
-    const [isLoading, setIsLoading] = React.useState(false)
-    const navigate = useNavigate()
+    const [isFormError, setIsFormError] = React.useState(false);
+    const [isFormSucces, setIsFormSucces] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState()
+    const [isFormErrorMessage, setIsFormErrorMessage] = React.useState('');
+    const navigate = useNavigate();
 
     const updateMovies = (movies) => {
         setMovies(movies)
@@ -80,6 +82,12 @@ function App() {
         localStorage.setItem('short_movies', JSON.stringify(movies));
     }
 
+    const updateShortSaveMovie = (saveMoves) => {
+        setCount(moviesCount)
+        setShort(saveMoves)
+        localStorage.setItem('short_save_movies', JSON.stringify(saveMoves));
+    }
+
     const updateQuery = (query) => {
         query = query.toLowerCase()
         setQuery(query)
@@ -87,34 +95,47 @@ function App() {
     }
 
     function handleSubmitForApi(e) {
+        setIsLoading(true)
         e.preventDefault()
         if(query.length) {
             const filterMovies = movies.filter((movie) => 
                 movie.nameRU.toLowerCase().indexOf(query) >= 0
             );
             updateFilterMovies(filterMovies);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 800);
+            
         } 
     };
 
     function handleSubmitForSave(e) {
+        setIsLoading(true)
         e.preventDefault()
         if(query.length) {
             const filterMovies = saveMovies.filter((movie) => 
                 movie.nameRU.toLowerCase().indexOf(query) >= 0
             );
             updateFilterSaveMovies(filterMovies);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 800);
         } 
     };
 
     function onProfile(name, email) {
         mainApi.updateUser(name, email)
         .then(res => {
-            setName(name)
+                setName(name)
+                setIsFormSucces(true)
+        })
+        .catch(err => {
+            setIsFormError(true)
+            setIsFormErrorMessage('Произошла ошибка обновления данных')
         })
     } 
 
     function onAuthorize(email, password) {
-        setIsLoading(true)
         mainApi.authorize(email, password)
         .then(res => {
             if (res.token) {
@@ -127,27 +148,24 @@ function App() {
             setIsLoggedIn(false)
             setIsFormError(true)
             navigate('/signin')
-        }).finally(
-            setIsLoading(false)
-        )
+        })
     }
 
     function onRegister(name, email, password) {
-        setIsLoading(true)
         mainApi.register(name, email, password)
-        .then(() => {
-            onAuthorize(email, password)
-            setIsLoggedIn(true)
-            navigate('/signin')
+        .then((res) => {
+            console.log(res.status)
+            if(res.ok) {
+                onAuthorize(email, password)
+                navigate('/signin')
+            } else if (res.status === 409){
+                setIsFormError(true)
+                setIsFormErrorMessage('Пользователь с таким Email уже зарегестрирован')
+            }
         }).catch((err) => {
-            console.log(err);
-            setIsLoggedIn(false);
             setIsFormError(true)
-            navigate('/signup')
-
-        }).finally(
-            setIsLoading(false)
-        )
+            setIsFormErrorMessage('что-то пошло не так')
+        })
     }
 
     const addMovies = () => {
@@ -155,26 +173,19 @@ function App() {
     }
 
     function saveMovie(movie) {
-        setIsLoading(true)
         mainApi.saveMovie(movie).then((m)=> {
             updateSaveMovies([m, ...saveMovies]);
-            updateFilterSaveMovies([m, ...saveMovies])
         }).catch((err) => {
             console.log(`Ошибка сохранения фильма: ${err}`)
-        }).finally(
-            setIsLoading(false)
-        )
+        })
     } 
     function deleteMovie(data) {
-        setIsLoading(true)
         mainApi.deleteMovie(data).then(() => {
             updateSaveMovies(saveMovies.filter((m) => m._id !== data._id))
             updateFilterSaveMovies(filterSaveMovies.filter((m) => m._id !== data._id))
         }).catch((err) => {
             console.log(`Ошибка удаления фильма: ${err}`)
-        }).finally(
-            setIsLoading(false)
-        )
+        })
     } 
 
     function onSignOut() {
@@ -193,17 +204,13 @@ function App() {
         updateQuery(localStorage.getItem('query') || '')
         updateShort(JSON.parse(localStorage.getItem('short_movies' || 'false')));
 
-        setIsLoading(true)
-
         if(!movies.length) {
             moviesApi().then((movies) => {
                 updateMovies(movies);
                 updateFilterMovies([]);
             }).catch((err) => {
                 console.log(`Ошибка загрузки фильмов с сервера: ${err}`)
-            }).finally(
-                setIsLoading(false)
-            )
+            })
         } 
 
     },[]) 
@@ -212,8 +219,7 @@ function App() {
         const saveMovies = JSON.parse(localStorage.getItem('save_movie') || '[]' );
         updateSaveMovies(saveMovies);
         updateFilterSaveMovies( JSON.parse(localStorage.getItem('filter_save_movies') || '[]'));
-        
-        setIsLoading(true)
+        updateShortSaveMovie(JSON.parse(localStorage.getItem('short_save_movies' || 'false')))
         
         if (isLoggedIn === true){
             mainApi.getAppInfo().then(([users, movies]) => {
@@ -221,11 +227,8 @@ function App() {
                 updateSaveMovies(movies.data) 
                 updateFilterSaveMovies([])
             }).catch((err) => {
-
                 console.log(`Ошибка получения данных с сервера: ${err}`);
-            }).finally(
-                setIsLoading(false)
-            )
+            })
         }
     },[isLoggedIn]) 
 
@@ -250,6 +253,7 @@ function App() {
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
+    
 
     return(
         <CurrentUserContext.Provider value={currentUser}>
@@ -287,8 +291,10 @@ function App() {
                                         saveMovies={userSaveMovie}
                                         handleSubmit={handleSubmitForSave}
                                         updateQuery={updateQuery}
+                                        updateShort={updateShortSaveMovie}
                                         query={query}
                                         deleteMovie={deleteMovie}
+                                        short={short}
                                     />
                                 }
                                 <Footer/>
@@ -297,12 +303,19 @@ function App() {
                     <Route path='/profile' element={
                         <ProtectedRoute loggedIn={isLoggedIn}>
                             {isLoading ? <Preloader/> : 
-                                <Profile onProfile={onProfile} name={name} onSignOut={onSignOut}/>
+                                <Profile 
+                                    onProfile={onProfile} 
+                                    name={name} 
+                                    onSignOut={onSignOut} 
+                                    error={isFormError} 
+                                    errorMessage={isFormErrorMessage}
+                                    succes={isFormSucces}
+                                />
                             }
                         </ProtectedRoute>
                     }/>
-                    <Route path='/signup' element={<Register onRegister={onRegister} error={isFormError}/>}/>
-                    <Route path='/signin' element={<Login onAuthorize={onAuthorize}/>}/>
+                    <Route path='/signup' element={<Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>}/>
+                    <Route path='/signin' element={<Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>}/>
                     <Route path='*' element={<NotFound/>}></Route>
                 </Routes>    
             </div>
