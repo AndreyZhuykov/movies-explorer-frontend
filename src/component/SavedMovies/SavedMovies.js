@@ -6,11 +6,8 @@ import EmptyMovie from "../EmptyMovie/EmptyMovie";
 
 function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveMovies,deleteMovie, updateShort}) {
 
-
     const emptyMovie = movies.length === 0
-
-    console.log(emptyMovie)
-
+    
     return (
         <section className="movies">
             <SearchForm

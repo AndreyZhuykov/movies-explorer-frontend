@@ -11,7 +11,6 @@ function Register(props) {
     const [isEmailValid, setIsEmailValid] = React.useState(false)
     const [isNameValid, setIsNameValid] = React.useState(false)
     const [isPasswordValid, setIsPasswordValid] = React.useState(false)
-
     const validator = require("validator");
 
     const validStatus = isNameValid && isEmailValid && isPasswordValid

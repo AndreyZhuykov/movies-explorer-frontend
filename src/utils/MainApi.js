@@ -71,7 +71,6 @@ export default class Api {
     }
 
     deleteMovie(data) {
-      console.log(data)
       return  this._set(`movies/${data._id}`,'DELETE')
     }
     

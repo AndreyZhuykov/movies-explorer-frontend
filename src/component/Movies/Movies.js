@@ -17,17 +17,10 @@ function Movies({
     saveMovie,
     saveMovies,
     deleteMovie,
-    isLoading
     }) 
 
 {   
-
-
     const emptyMovie = movies.length === 0
-
-    console.log(emptyMovie)
-
-
 
     return (
         <section className="movies">

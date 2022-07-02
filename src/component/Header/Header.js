@@ -1,14 +1,12 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import headerLogo from '../../images/logo.svg'
 import Navigation from '../Navigation/Navigation';
 
-
 function Header(props) {
     const [isActive, setIsActive] = useState(false);
     
-
     function openNavigation() {
         setIsActive(true);
     }
