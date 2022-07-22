@@ -13,7 +13,7 @@ function Profile(props) {
     const validStatus = isNameValid && isEmailValid;
     const formReady =  dataChanged && validStatus;
 
-    console.log(formReady)
+    console.log(props)
 
     function handleName(e) {
         setName(e.target.value)
