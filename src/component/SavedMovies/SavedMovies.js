@@ -4,10 +4,13 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox"
 import EmptyMovie from "../EmptyMovie/EmptyMovie";
 
-function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveMovies,deleteMovie, updateShort}) {
+function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveMovies,deleteMovie, updateShort,movieNotFound}) {
 
-    const emptyMovie = movies.length === 0
+    const sM = movies.length === 0
     
+
+    console.log(movieNotFound)
+
     return (
         <section className="movies">
             <SearchForm
@@ -19,15 +22,17 @@ function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveM
                 short={short}
                 updateShort={updateShort}
             />
-            {emptyMovie? <EmptyMovie/> : 
-            <MoviesCardList
-                movies={movies}
+            {movieNotFound ? <EmptyMovie/> : <MoviesCardList
+                movies={sM? saveMovies : movies}
                 short={short}
                 count={count}
                 saveMovies={saveMovies}
                 deleteMovie={deleteMovie}
-            />
-            }
+            />} 
+            
+         
+            
+            
         </section>
     )
 }

@@ -40,7 +40,7 @@ window.onresize = () => {
 onResize();
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [isLoggedIn, setIsLoggedIn] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState({});
     const [movies, setMovies] = React.useState([]);
     const [saveMovies, setSaveMovies] = React.useState([]);
@@ -54,7 +54,9 @@ function App() {
     const [isFormSucces, setIsFormSucces] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState()
     const [isFormErrorMessage, setIsFormErrorMessage] = React.useState('');
+    const [movieNotFound, setMovieNotFound] = React.useState(false)
     const navigate = useNavigate();
+    console.log(isLoggedIn)
 
     const updateMovies = (movies) => {
         setMovies(movies)
@@ -102,6 +104,11 @@ function App() {
                 movie.nameRU.toLowerCase().indexOf(query) >= 0
             );
             updateFilterMovies(filterMovies);
+            if (filterMovies.length === 0) {
+                setMovieNotFound(true)
+            } else {
+                setMovieNotFound(false)
+            }
             setTimeout(() => {
                 setIsLoading(false);
             }, 800);
@@ -116,6 +123,11 @@ function App() {
             const filterMovies = saveMovies.filter((movie) => 
                 movie.nameRU.toLowerCase().indexOf(query) >= 0
             );
+            if (filterMovies.length === 0) {
+                setMovieNotFound(true)
+            } else {
+                setMovieNotFound(false)
+            }
             updateFilterSaveMovies(filterMovies);
             setTimeout(() => {
                 setIsLoading(false);
@@ -139,7 +151,6 @@ function App() {
         mainApi.authorize(email, password)
         .then(res => {
             if (res.token) {
-                setName()
                 localStorage.setItem('jwt', res.token)
                 setIsLoggedIn(true)
                 navigate('/movies')
@@ -154,7 +165,6 @@ function App() {
     function onRegister(name, email, password) {
         mainApi.register(name, email, password)
         .then((res) => {
-            console.log(res.status)
             if(res.ok) {
                 onAuthorize(email, password)
                 navigate('/signin')
@@ -179,6 +189,7 @@ function App() {
             console.log(`Ошибка сохранения фильма: ${err}`)
         })
     } 
+
     function deleteMovie(data) {
         mainApi.deleteMovie(data).then(() => {
             updateSaveMovies(saveMovies.filter((m) => m._id !== data._id))
@@ -240,7 +251,6 @@ function App() {
                     .then((res) => {
                         if (res) {
                             setIsLoggedIn(true)
-                            setName(res.user.name)
                         }
                     })
                     .catch((err) => {
@@ -254,7 +264,6 @@ function App() {
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
     
-
     return(
         <CurrentUserContext.Provider value={currentUser}>
             <div className='app'>
@@ -264,8 +273,7 @@ function App() {
                         <Main/>
                     }/>
                         <Route path='/movies' element={
-                            <ProtectedRoute loggedIn={isLoggedIn}>
-                                {isLoading ? <Preloader/> : 
+                            <ProtectedRoute loggedIn={isLoggedIn} >
                                 <Movies
                                     movies={filterMovies}
                                     saveMovies={userSaveMovie}
@@ -277,15 +285,14 @@ function App() {
                                     count={count}
                                     addMovies={addMovies}
                                     saveMovie={saveMovie}
+                                    movieNotFound={movieNotFound}
                                     deleteMovie={deleteMovie}
                                 />
-                                }
                                 <Footer/>
                             </ProtectedRoute>
                         }/>
                         <Route path='/saved-movies' element={
                             <ProtectedRoute loggedIn={isLoggedIn}>
-                                {isLoading ? <Preloader/> :
                                     <SavedMovies
                                         movies={userfilterSaveMovie}
                                         saveMovies={userSaveMovie}
@@ -294,15 +301,14 @@ function App() {
                                         updateShort={updateShortSaveMovie}
                                         query={query}
                                         deleteMovie={deleteMovie}
+                                        movieNotFound={movieNotFound}
                                         short={short}
                                     />
-                                }
                                 <Footer/>
                             </ProtectedRoute>
                         }/>
                     <Route path='/profile' element={
                         <ProtectedRoute loggedIn={isLoggedIn}>
-                            {isLoading ? <Preloader/> : 
                                 <Profile 
                                     onProfile={onProfile} 
                                     name={name} 
@@ -311,11 +317,19 @@ function App() {
                                     errorMessage={isFormErrorMessage}
                                     succes={isFormSucces}
                                 />
-                            }
                         </ProtectedRoute>
                     }/>
-                    <Route path='/signup' element={<Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>}/>
-                    <Route path='/signin' element={<Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>}/>
+                    <Route path='/signup' element={
+                        <ProtectedRoute loggedIn={!isLoggedIn}>
+                            <Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path='/signin' element={
+                        <ProtectedRoute loggedIn={!isLoggedIn}>
+                            <Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>
+                        </ProtectedRoute>
+                    }/>
                     <Route path='*' element={<NotFound/>}></Route>
                 </Routes>    
             </div>

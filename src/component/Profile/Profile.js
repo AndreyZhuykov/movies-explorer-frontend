@@ -1,30 +1,26 @@
 import React from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-
-
 function Profile(props) {
-    
+    const currentUser = React.useContext(CurrentUserContext);
     const [name, setName] = React.useState('')
     const [email, setEmail] = React.useState('')
-    const [isEmailValid, setIsEmailValid] = React.useState(false)
-    const [isNameValid, setIsNameValid] = React.useState(false)
-    const currentUser = React.useContext(CurrentUserContext);
+    const [isEmailValid, setIsEmailValid] = React.useState(true)
+    const [isNameValid, setIsNameValid] = React.useState(true)
     const validator = require("validator");
 
-    const dataUnchanged = currentUser.email === email && currentUser.name === name;
+    const dataChanged = currentUser.email !== email || currentUser.name !== name;
+    const validStatus = isNameValid && isEmailValid;
+    const formReady =  dataChanged && validStatus;
 
-
-    const validStatus = isNameValid && isEmailValid && !dataUnchanged
+    console.log(formReady)
 
     function handleName(e) {
         setName(e.target.value)
-        if (e.target.validity.valid !== true) {
-            setIsNameValid(false)
-        } else if (e.target.value === name) {
-            setIsNameValid(false)
-        } else {
+        if (e.target.validity.valid === true) {
             setIsNameValid(true)
+        }  else {
+            setIsNameValid(false)
         }
     }
 
@@ -55,7 +51,7 @@ function Profile(props) {
                 <input className="profile__input" placeholder="Имя" type='text' onChange={handleName} required value={name}></input>
                 <input className="profile__input" placeholder="E-mail" type='email' onChange={handleEmail} required value={email}></input>
                 {props.succes ? <span className="profile__span">Успешно!</span> : <span className="profile__span"></span>}
-                {validStatus ? <button className="profile__button" type='submit'>Редактировать</button> : <button className="profile__button" type='submit' disabled>Редактировать</button>}
+                {formReady ? <button className="profile__button" type='submit'>Редактировать</button> : <button className="profile__button" type='submit' disabled>Редактировать</button>}
                 <button className="profile__button profile__button_exit" onClick={props.onSignOut}>Выйти из аккаунта</button> 
                 
             </form>

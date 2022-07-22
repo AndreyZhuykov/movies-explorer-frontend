@@ -15,15 +15,14 @@ function Header(props) {
         setIsActive(false);
     }
 
-
     return (
             <Routes>
                 <Route path='/' element={<>
                     {!props.isLoggedIn ? 
                         <header className='header'>
-                        <Link to='/'>
+                        <NavLink to='/'>
                             <img className='header__logo' alt='Логотип' src={headerLogo}/>
-                        </Link>
+                        </NavLink>
                         <Link className='header__link' to="/signup">Регистрация</Link>
                         <Link className='header__button' to="/signin">Войти</Link>
                         </header> 

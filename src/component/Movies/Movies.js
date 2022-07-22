@@ -17,10 +17,10 @@ function Movies({
     saveMovie,
     saveMovies,
     deleteMovie,
+    movieNotFound,
     }) 
 
 {   
-    const emptyMovie = movies.length === 0
 
     return (
         <section className="movies">
@@ -33,16 +33,21 @@ function Movies({
                 short={short}
                 updateShort={updateShort}
             />
-            {emptyMovie? <EmptyMovie/> : 
-                <MoviesCardList 
-                movies={movies}
-                short={short}
-                count={count}     
-                saveMovie={saveMovie}      
-                saveMovies={saveMovies}
-                deleteMovie={deleteMovie}
-                />
+            {movieNotFound ?  
+            <EmptyMovie/>
+            :
+            <MoviesCardList 
+            movies={movies}
+            short={short}
+            count={count}     
+            saveMovie={saveMovie}      
+            saveMovies={saveMovies}
+            deleteMovie={deleteMovie}
+            />
             }
+            
+                
+            
             <MoreButton
                 movies={movies}
                 count={count}

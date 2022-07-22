@@ -47,10 +47,6 @@ function Register(props) {
         props.onRegister(name, email, password)
     }
 
-    
-    console.log(props.errorMessage)
-    console.log(props.error)
-
     return(
         <div className="register">
             <h2 className="register__title">Добро пожаловать!</h2>
