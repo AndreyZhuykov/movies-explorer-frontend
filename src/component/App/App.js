@@ -49,7 +49,6 @@ function App() {
     const [short, setShort] = React.useState(false);
     const [query, setQuery] = React.useState('');
     const [count, setCount] = React.useState(5);
-    const [name, setName] = React.useState('');
     const [isFormError, setIsFormError] = React.useState(false);
     const [isFormSucces, setIsFormSucces] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState()
@@ -137,7 +136,6 @@ function App() {
     function onProfile(name, email) {
         mainApi.updateUser(name, email)
         .then(res => {
-                setName(name)
                 setIsFormSucces(true)
         })
         .catch(err => {
@@ -166,7 +164,6 @@ function App() {
         .then((res) => {
             if(res.ok) {
                 onAuthorize(email, password)
-                setName(name)
                 navigate('/signin')
             } else if (res.status === 409){
                 setIsFormError(true)
@@ -201,7 +198,6 @@ function App() {
 
     function onSignOut() {
         setIsLoggedIn(false)
-        setName(null)
         navigate('/')
         localStorage.removeItem("jwt")
         localStorage.clear()
@@ -263,8 +259,6 @@ function App() {
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
-
-    console.log(name)
     
     return(
         <CurrentUserContext.Provider value={currentUser}>
