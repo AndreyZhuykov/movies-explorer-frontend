@@ -166,6 +166,7 @@ function App() {
         .then((res) => {
             if(res.ok) {
                 onAuthorize(email, password)
+                setName(name)
                 navigate('/signin')
             } else if (res.status === 409){
                 setIsFormError(true)
@@ -263,7 +264,7 @@ function App() {
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
 
-    console.log()
+    console.log(name)
     
     return(
         <CurrentUserContext.Provider value={currentUser}>
@@ -314,7 +315,7 @@ function App() {
                         <ProtectedRoute loggedIn={isLoggedIn}>
                                 <Profile 
                                     onProfile={onProfile} 
-                                    name={name} 
+                                    name={currentUser.name} 
                                     onSignOut={onSignOut} 
                                     error={isFormError} 
                                     errorMessage={isFormErrorMessage}
