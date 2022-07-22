@@ -11,8 +11,8 @@ import Login from '../Login/Login'
 import moviesApi from '../../utils/MoviesApi';
 import NotFound from '../NotFound/NotFound';
 import Footer from '../Footer/Footer';
-import Preloader from '../Preloader/Preloader';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Preloader from "../Preloader/Preloader"
 import {mainApi} from '../../utils/MainApi'
 
 let moviesCount = 0;
@@ -56,7 +56,6 @@ function App() {
     const [isFormErrorMessage, setIsFormErrorMessage] = React.useState('');
     const [movieNotFound, setMovieNotFound] = React.useState(false)
     const navigate = useNavigate();
-    console.log(isLoggedIn)
 
     const updateMovies = (movies) => {
         setMovies(movies)
@@ -263,6 +262,8 @@ function App() {
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
+
+    console.log()
     
     return(
         <CurrentUserContext.Provider value={currentUser}>
@@ -273,25 +274,27 @@ function App() {
                         <Main/>
                     }/>
                         <Route path='/movies' element={
-                            <ProtectedRoute loggedIn={isLoggedIn} >
-                                <Movies
-                                    movies={filterMovies}
-                                    saveMovies={userSaveMovie}
-                                    handleSubmit={handleSubmitForApi}
-                                    query={query}
-                                    short={short}
-                                    updateShort={updateShort}
-                                    updateQuery={updateQuery}
-                                    count={count}
-                                    addMovies={addMovies}
-                                    saveMovie={saveMovie}
-                                    movieNotFound={movieNotFound}
-                                    deleteMovie={deleteMovie}
-                                />
-                                <Footer/>
-                            </ProtectedRoute>
+                            isLoading ? <Preloader/> :
+                                <ProtectedRoute loggedIn={isLoggedIn} >
+                                    <Movies
+                                        movies={filterMovies}
+                                        saveMovies={userSaveMovie}
+                                        handleSubmit={handleSubmitForApi}
+                                        query={query}
+                                        short={short}
+                                        updateShort={updateShort}
+                                        updateQuery={updateQuery}
+                                        count={count}
+                                        addMovies={addMovies}
+                                        saveMovie={saveMovie}
+                                        movieNotFound={movieNotFound}
+                                        deleteMovie={deleteMovie}
+                                    />
+                                    <Footer/>
+                                </ProtectedRoute>   
                         }/>
                         <Route path='/saved-movies' element={
+                            isLoading ? <Preloader/> :
                             <ProtectedRoute loggedIn={isLoggedIn}>
                                     <SavedMovies
                                         movies={userfilterSaveMovie}
