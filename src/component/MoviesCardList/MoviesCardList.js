@@ -1,7 +1,6 @@
 import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-
 function MoviesCardList(props) {
 
     return(
@@ -10,13 +9,13 @@ function MoviesCardList(props) {
                 .filter((movie) => !props.short || movie.duration <= 40)
                 .slice(0, props.count)
                 .map((movie) => {
-                    return <MoviesCard
+                        return <MoviesCard 
                         key={movie.id || movie.movieId}
                         movie={movie}
                         saveMovie={props.saveMovie}
                         saveMovies={props.saveMovies}
                         deleteMovie={props.deleteMovie}
-                    />
+                    />    
                 })
                 }
             </div>

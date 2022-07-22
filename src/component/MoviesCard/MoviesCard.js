@@ -3,21 +3,24 @@ import { useLocation } from "react-router-dom";
 
 function MoviesCard(props) {
     const [urlState, setUrlState] = React.useState(false)
-
-
+    
     const url = useLocation();
+
     const isMovieSave = props.saveMovies.some(
-        (m) => m.movieId === props.movie.id
+        (m) => { 
+            return m.movieId === props.movie.id
+        }
     );
 
     const userSaveMovie = Object.values(props.saveMovies).filter(
-        (m) => 
-            m.movieId === props.movie.id
-        
+        (m) => {
+            return m.movieId === props.movie.id
+        }
     )[0];
+
     const cardLikeButtonClassName = (
         `movies-card__button ${isMovieSave ? 'movies-card__button_active' : ' '}`
-    )
+    );
  
     const addres = 'https://api.nomoreparties.co'
     const img = props.movie.image.url
@@ -36,14 +39,13 @@ function MoviesCard(props) {
             nameEN: props.movie.nameEN,
             thumbnail:  addres + img,
             movieId: props.movie.id,
-          };
+        };
         if(movie.country === ""){
             movie.country = "unknown";
         }
         if(movie.nameEN === ""){
             movie.nameEN = movie.nameRU;
         }
-        console.log(movie)
         props.saveMovie(movie);
     } 
 
@@ -53,7 +55,6 @@ function MoviesCard(props) {
 
     function handleDeleteSaveMovie(e) {
         props.deleteMovie(userSaveMovie);
-
     }
 
     React.useEffect(() => {
