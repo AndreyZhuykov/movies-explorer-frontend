@@ -46,7 +46,7 @@ function Profile(props) {
 
     return(
         <div className="profile">
-            <h2 className="profile__title" >Привет, {currentUser.name}!</h2>
+            <h2 className="profile__title" >Привет, {props.name}!</h2>
             <form className="profile__form" onSubmit={handleSubmit} >
                 <input className="profile__input" placeholder="Имя" type='text' onChange={handleName} required value={name}></input>
                 <input className="profile__input" placeholder="E-mail" type='email' onChange={handleEmail} required value={email}></input>
