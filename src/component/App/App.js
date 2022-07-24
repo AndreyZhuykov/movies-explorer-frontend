@@ -39,7 +39,7 @@ window.onresize = () => {
 
 onResize();
 
-function delay(time = 500) {
+function delay(time = 1200) {
     return new Promise((resolve) => {
         console.log(resolve)
       setTimeout(resolve, time);
