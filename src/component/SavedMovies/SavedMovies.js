@@ -6,10 +6,7 @@ import EmptyMovie from "../EmptyMovie/EmptyMovie";
 
 function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveMovies,deleteMovie, updateShort,movieNotFound}) {
 
-    const sM = movies.length === 0
-    
-
-    console.log(movieNotFound)
+    const emptyMovies = movies.length === 0
 
     return (
         <section className="movies">
@@ -23,7 +20,7 @@ function SavedMovies({movies, short, count,handleSubmit,updateQuery,query, saveM
                 updateShort={updateShort}
             />
             {movieNotFound ? <EmptyMovie/> : <MoviesCardList
-                movies={sM? saveMovies : movies}
+                movies={emptyMovies? saveMovies : movies}
                 short={short}
                 count={count}
                 saveMovies={saveMovies}
