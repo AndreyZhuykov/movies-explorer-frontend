@@ -295,7 +295,6 @@ function App() {
 
     React.useEffect(() => {
         delay().then(() => {
-            setIsLoggedIn(true)
             setIsLoading(false)
         }
        );
