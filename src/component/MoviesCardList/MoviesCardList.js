@@ -3,6 +3,8 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 
 function MoviesCardList(props) {
 
+    console.log(props)
+
     return(
             <div className="movies-card-list">
                 {props.movies
