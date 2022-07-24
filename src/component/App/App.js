@@ -12,6 +12,7 @@ import moviesApi from '../../utils/MoviesApi';
 import NotFound from '../NotFound/NotFound';
 import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import UnsingProtectedRoute from '../UnsingProtectedRoute/UnsingProtectedRoute'
 import Preloader from "../Preloader/Preloader"
 import {mainApi} from '../../utils/MainApi'
 
@@ -40,20 +41,25 @@ window.onresize = () => {
 onResize();
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = React.useState(null);
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [currentUser, setCurrentUser] = React.useState({});
     const [movies, setMovies] = React.useState([]);
     const [saveMovies, setSaveMovies] = React.useState([]);
     const [filterMovies, setFilterMovies] = React.useState([])
     const [filterSaveMovies, setFilterSaveMovies] = React.useState([])
     const [short, setShort] = React.useState(false);
+    const [shortSaveMovie, setShortSaveMovie] = React.useState(false);
     const [query, setQuery] = React.useState('');
+    const [saveMovieQuery, setSaveMovieQuery] = React.useState('');
     const [count, setCount] = React.useState(5);
     const [isFormError, setIsFormError] = React.useState(false);
     const [isFormSucces, setIsFormSucces] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState()
     const [isFormErrorMessage, setIsFormErrorMessage] = React.useState('');
     const [movieNotFound, setMovieNotFound] = React.useState(false)
+    const [saveMovieNotFound, setSaveMovieNotFound] = React.useState(false)
+    const [name, setName] = React.useState('')
+    const [email, setEmail] = React.useState('')
     const navigate = useNavigate();
 
     const updateMovies = (movies) => {
@@ -84,14 +90,20 @@ function App() {
 
     const updateShortSaveMovie = (saveMoves) => {
         setCount(moviesCount)
-        setShort(saveMoves)
+        setShortSaveMovie(saveMoves)
         localStorage.setItem('short_save_movies', JSON.stringify(saveMoves));
     }
 
-    const updateQuery = (query) => {
+    const updateMovieQuery = (query) => {
         query = query.toLowerCase()
         setQuery(query)
         localStorage.setItem('query', query)
+    }
+
+    const updateSaveMovieQuery = (query) => {
+        query = query.toLowerCase()
+        setSaveMovieQuery(query)
+        localStorage.setItem('saveMovieQuery', query)
     }
 
     function handleSubmitForApi(e) {
@@ -122,9 +134,9 @@ function App() {
                 movie.nameRU.toLowerCase().indexOf(query) >= 0
             );
             if (filterMovies.length === 0) {
-                setMovieNotFound(true)
+                setSaveMovieNotFound(true)
             } else {
-                setMovieNotFound(false)
+                setSaveMovieNotFound(false)
             }
             updateFilterSaveMovies(filterMovies);
             setTimeout(() => {
@@ -136,6 +148,8 @@ function App() {
     function onProfile(name, email) {
         mainApi.updateUser(name, email)
         .then(res => {
+                setName(name)
+                setEmail(email)
                 setIsFormSucces(true)
         })
         .catch(err => {
@@ -149,8 +163,11 @@ function App() {
         .then(res => {
             if (res.token) {
                 localStorage.setItem('jwt', res.token)
+                localStorage.setItem('isLoggedIn', true)
                 setIsLoggedIn(true)
                 navigate('/movies')
+                setName(name)
+                setEmail(email)
             } 
         }).catch((err) => {
             setIsLoggedIn(false)
@@ -163,6 +180,8 @@ function App() {
         mainApi.register(name, email, password)
         .then((res) => {
             if(res.ok) {
+                setName(name)
+                setEmail(email)
                 onAuthorize(email, password)
                 navigate('/signin')
             } else if (res.status === 409){
@@ -197,10 +216,16 @@ function App() {
     } 
 
     function onSignOut() {
-        setIsLoggedIn(false)
-        navigate('/')
         localStorage.removeItem("jwt")
         localStorage.clear()
+        setIsLoggedIn(false)
+        navigate('/')
+        setFilterMovies([])
+        setFilterSaveMovies([])
+        setShort(false)
+        setShortSaveMovie(false)
+        setQuery('')
+        setSaveMovieQuery('')
     }
 
     React.useEffect(() => {
@@ -208,7 +233,7 @@ function App() {
 
         updateMovies(movies);
         updateFilterMovies( JSON.parse(localStorage.getItem('filter_movies') || '[]'));
-        updateQuery(localStorage.getItem('query') || '')
+        updateMovieQuery(localStorage.getItem('query') || '')
         updateShort(JSON.parse(localStorage.getItem('short_movies' || 'false')));
 
         if(!movies.length) {
@@ -226,11 +251,14 @@ function App() {
         const saveMovies = JSON.parse(localStorage.getItem('save_movie') || '[]' );
         updateSaveMovies(saveMovies);
         updateFilterSaveMovies( JSON.parse(localStorage.getItem('filter_save_movies') || '[]'));
+        updateSaveMovieQuery(localStorage.getItem('saveMovieQuery') || '')
         updateShortSaveMovie(JSON.parse(localStorage.getItem('short_save_movies' || 'false')))
         
         if (isLoggedIn === true){
             mainApi.getAppInfo().then(([users, movies]) => {
                 setCurrentUser(users.user)
+                setName(users.user.name)
+                setEmail(users.user.email)
                 updateSaveMovies(movies.data) 
                 updateFilterSaveMovies([])
             }).catch((err) => {
@@ -238,24 +266,30 @@ function App() {
             })
         }
     },[isLoggedIn]) 
-
+    
     React.useEffect(() => {
-        setTimeout(() => {
-            const jwt = localStorage.getItem("jwt")
-            if (jwt) {
-                mainApi.checkToken(jwt)
-                    .then((res) => {
-                        if (res) {
-                            setIsLoggedIn(true)
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(`Ошибка получения токена: ${err}`)
-                        setIsLoggedIn(false)
-                    })
+        setIsLoading(true)
+            setTimeout(() => {
+                const jwt = localStorage.getItem("jwt")
+                if (jwt) {
+                    mainApi.checkToken(jwt)
+                        .then((res) => {
+                            if (res) {
+                                insideDate()
+                                setIsLoading(false)
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(`Ошибка получения токена: ${err}`)
+                            setIsLoggedIn(false)
+                        })
             }
-        }, 100);
+        }, 200);    
     }, [navigate])
+
+    function insideDate() {
+        setIsLoggedIn(true);
+    }
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
@@ -278,7 +312,7 @@ function App() {
                                         query={query}
                                         short={short}
                                         updateShort={updateShort}
-                                        updateQuery={updateQuery}
+                                        updateQuery={updateMovieQuery}
                                         count={count}
                                         addMovies={addMovies}
                                         saveMovie={saveMovie}
@@ -295,12 +329,12 @@ function App() {
                                         movies={userfilterSaveMovie}
                                         saveMovies={userSaveMovie}
                                         handleSubmit={handleSubmitForSave}
-                                        updateQuery={updateQuery}
+                                        updateQuery={updateSaveMovieQuery}
                                         updateShort={updateShortSaveMovie}
-                                        query={query}
+                                        query={saveMovieQuery}
                                         deleteMovie={deleteMovie}
-                                        movieNotFound={movieNotFound}
-                                        short={short}
+                                        movieNotFound={saveMovieNotFound}
+                                        short={shortSaveMovie}
                                     />
                                 <Footer/>
                             </ProtectedRoute>
@@ -309,7 +343,8 @@ function App() {
                         <ProtectedRoute loggedIn={isLoggedIn}>
                                 <Profile 
                                     onProfile={onProfile} 
-                                    name={currentUser.name} 
+                                    name={name} 
+                                    email={email}
                                     onSignOut={onSignOut} 
                                     error={isFormError} 
                                     errorMessage={isFormErrorMessage}
@@ -318,15 +353,15 @@ function App() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/signup' element={
-                        <ProtectedRoute loggedIn={!isLoggedIn}>
+                        <UnsingProtectedRoute loggedIn={isLoggedIn}>
                             <Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>
-                        </ProtectedRoute>
+                        </UnsingProtectedRoute>
                     }
                     />
                     <Route path='/signin' element={
-                        <ProtectedRoute loggedIn={!isLoggedIn}>
+                        <UnsingProtectedRoute loggedIn={isLoggedIn}>
                             <Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>
-                        </ProtectedRoute>
+                        </UnsingProtectedRoute>
                     }/>
                     <Route path='*' element={<NotFound/>}></Route>
                 </Routes>    
