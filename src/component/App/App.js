@@ -12,7 +12,6 @@ import moviesApi from '../../utils/MoviesApi';
 import NotFound from '../NotFound/NotFound';
 import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import UnsingProtectedRoute from '../UnsingProtectedRoute/UnsingProtectedRoute'
 import Preloader from "../Preloader/Preloader"
 import {mainApi} from '../../utils/MainApi'
 
@@ -40,6 +39,13 @@ window.onresize = () => {
 
 onResize();
 
+function delay(time = 500) {
+    return new Promise((resolve) => {
+        console.log(resolve)
+      setTimeout(resolve, time);
+    });
+}
+
 function App() {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [currentUser, setCurrentUser] = React.useState({});
@@ -54,7 +60,7 @@ function App() {
     const [count, setCount] = React.useState(5);
     const [isFormError, setIsFormError] = React.useState(false);
     const [isFormSucces, setIsFormSucces] = React.useState(false)
-    const [isLoading, setIsLoading] = React.useState()
+    const [isLoading, setIsLoading] = React.useState(true)
     const [isFormErrorMessage, setIsFormErrorMessage] = React.useState('');
     const [movieNotFound, setMovieNotFound] = React.useState(false)
     const [saveMovieNotFound, setSaveMovieNotFound] = React.useState(false)
@@ -269,13 +275,13 @@ function App() {
     
     React.useEffect(() => {
         setIsLoading(true)
-            setTimeout(() => {
-                const jwt = localStorage.getItem("jwt")
+        delay().then(() => {
+            const jwt = localStorage.getItem("jwt")
                 if (jwt) {
                     mainApi.checkToken(jwt)
                         .then((res) => {
                             if (res) {
-                                insideDate()
+                                setIsLoggedIn(true)
                                 setIsLoading(false)
                             }
                         })
@@ -284,12 +290,18 @@ function App() {
                             setIsLoggedIn(false)
                         })
             }
-        }, 200);    
+            setIsLoading(false)
+            
+        }); 
     }, [navigate])
 
-    function insideDate() {
-        setIsLoggedIn(true);
-    }
+    React.useEffect(() => {
+        delay().then(() => {
+            setIsLoggedIn(true)
+            setIsLoading(false)
+        }
+       );
+    }, [setIsLoading]);
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
@@ -353,15 +365,17 @@ function App() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/signup' element={
-                        <UnsingProtectedRoute loggedIn={isLoggedIn}>
+                        isLoading ? <Preloader/> :
+                        <ProtectedRoute loggedIn={!isLoggedIn}>
                             <Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>
-                        </UnsingProtectedRoute>
+                        </ProtectedRoute>
                     }
                     />
                     <Route path='/signin' element={
-                        <UnsingProtectedRoute loggedIn={isLoggedIn}>
+                        isLoading ? <Preloader/> :
+                        <ProtectedRoute loggedIn={!isLoggedIn}>
                             <Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>
-                        </UnsingProtectedRoute>
+                        </ProtectedRoute>
                     }/>
                     <Route path='*' element={<NotFound/>}></Route>
                 </Routes>    

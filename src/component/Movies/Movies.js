@@ -19,7 +19,6 @@ function Movies({
     deleteMovie,
     movieNotFound,
     }) 
-
 {   
 
     return (
