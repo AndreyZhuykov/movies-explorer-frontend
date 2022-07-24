@@ -362,14 +362,12 @@ function App() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/signup' element={
-                        isLoading ? <Preloader/> :
                         <ProtectedRoute loggedIn={!isLoggedIn}>
                             <Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>
                         </ProtectedRoute>
                     }
                     />
                     <Route path='/signin' element={
-                        isLoading ? <Preloader/> :
                         <ProtectedRoute loggedIn={!isLoggedIn}>
                             <Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>
                         </ProtectedRoute>
