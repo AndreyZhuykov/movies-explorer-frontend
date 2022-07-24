@@ -39,7 +39,7 @@ window.onresize = () => {
 
 onResize();
 
-function delay(time = 1200) {
+function delay(time = 1500) {
     return new Promise((resolve) => {
         console.log(resolve)
       setTimeout(resolve, time);
@@ -275,24 +275,22 @@ function App() {
     
     React.useEffect(() => {
         setIsLoading(true)
-        delay().then(() => {
+        setTimeout(() => {
             const jwt = localStorage.getItem("jwt")
-                if (jwt) {
-                    mainApi.checkToken(jwt)
-                        .then((res) => {
-                            if (res) {
-                                setIsLoggedIn(true)
-                                setIsLoading(false)
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(`Ошибка получения токена: ${err}`)
-                            setIsLoggedIn(false)
-                        })
-            }
-            setIsLoading(false)
-            
-        }); 
+            if (jwt) {
+                mainApi.checkToken(jwt)
+                    .then((res) => {
+                        if (res) {
+                            setIsLoggedIn(true)
+                            setIsLoading(false)
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Ошибка получения токена: ${err}`)
+                        setIsLoggedIn(false)
+                    })
+                }
+        } , 1000)
     }, [navigate])
 
     React.useEffect(() => {
