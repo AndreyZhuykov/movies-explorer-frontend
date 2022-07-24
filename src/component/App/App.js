@@ -314,7 +314,7 @@ function App() {
                     }/>
                         <Route path='/movies' element={
                             isLoading ? <Preloader/> :
-                                <ProtectedRoute loggedIn={isLoggedIn} >
+                                <ProtectedRoute loggedIn={isLoggedIn} navigaite={'/'}>
                                     <Movies
                                         movies={filterMovies}
                                         saveMovies={userSaveMovie}
@@ -334,7 +334,7 @@ function App() {
                         }/>
                         <Route path='/saved-movies' element={
                             isLoading ? <Preloader/> :
-                            <ProtectedRoute loggedIn={isLoggedIn}>
+                            <ProtectedRoute loggedIn={isLoggedIn} navigaite={'/'}>
                                     <SavedMovies
                                         movies={userfilterSaveMovie}
                                         saveMovies={userSaveMovie}
@@ -350,7 +350,7 @@ function App() {
                             </ProtectedRoute>
                         }/>
                     <Route path='/profile' element={
-                        <ProtectedRoute loggedIn={isLoggedIn}>
+                        <ProtectedRoute loggedIn={isLoggedIn} navigaite={'/'}>
                                 <Profile 
                                     onProfile={onProfile} 
                                     name={name} 
@@ -363,13 +363,13 @@ function App() {
                         </ProtectedRoute>
                     }/>
                     <Route path='/signup' element={
-                        <ProtectedRoute loggedIn={!isLoggedIn}>
+                        <ProtectedRoute loggedIn={!isLoggedIn} navigaite={'/movies'}>
                             <Register onRegister={onRegister} error={isFormError} errorMessage={isFormErrorMessage}/>
                         </ProtectedRoute>
                     }
                     />
                     <Route path='/signin' element={
-                        <ProtectedRoute loggedIn={!isLoggedIn}>
+                        <ProtectedRoute loggedIn={!isLoggedIn} navigaite={'/movies'} >
                             <Login onAuthorize={onAuthorize} error={isFormError} errorMessage={isFormErrorMessage}/>
                         </ProtectedRoute>
                     }/>

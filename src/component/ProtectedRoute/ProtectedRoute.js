@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({loggedIn, children}) => {
+const ProtectedRoute = ({loggedIn, children, navigaite}) => {
   
   return (
-    loggedIn ? children : <Navigate to="/"/>
+    loggedIn ? children : <Navigate to={navigaite}/>
   );
 };
 
