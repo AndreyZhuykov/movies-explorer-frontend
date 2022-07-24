@@ -8,18 +8,24 @@ function Profile(props) {
     const [isEmailValid, setIsEmailValid] = React.useState(true)
     const [isNameValid, setIsNameValid] = React.useState(true)
     const validator = require("validator");
+    
+    React.useEffect(() => {
+        setName(currentUser.name);
+        setEmail(currentUser.email);
+    }, [currentUser]); 
 
-    const dataChanged = currentUser.email !== email || currentUser.name !== name;
-    const validStatus = isNameValid && isEmailValid;
-    const formReady =  dataChanged && validStatus;
-
-    console.log(props)
+    function handleSubmit(e) {
+        e.preventDefault()
+        props.onProfile(name, email);
+    }
 
     function handleName(e) {
         setName(e.target.value)
         if (e.target.validity.valid === true) {
             setIsNameValid(true)
-        }  else {
+        }  else if (props.name !== name) {
+            setIsNameValid(true)
+        } else {
             setIsNameValid(false)
         }
     }
@@ -28,21 +34,20 @@ function Profile(props) {
         setEmail(e.target.value)
         if (validator.isEmail(e.target.value) === true) {
             setIsEmailValid(true)
+        } else if (currentUser.email !== email) {
+            setIsEmailValid(true)
         } else {
             setIsEmailValid(false)
         }
     }
 
-    function handleSubmit(e) {
-        e.preventDefault()
-        props.onProfile(name, email)
-    }
 
+    const dataChanged = props.email !== email || props.name !== name;
+    const validStatus = isNameValid && isEmailValid;
+    const formReady =  dataChanged && validStatus;
 
-    React.useEffect(() => {
-        setName(currentUser.name);
-        setEmail(currentUser.email);
-    }, [currentUser]); 
+    console.log(validStatus)
+    console.log(dataChanged)
 
     return(
         <div className="profile">

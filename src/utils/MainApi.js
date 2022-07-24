@@ -92,6 +92,7 @@ export default class Api {
     }
     
     authorize = (email, password) => {
+      console.log(this._address)
       return fetch(`${this._address}/signin`, {
           method: 'POST',
           headers: {
@@ -110,6 +111,7 @@ export default class Api {
     }
 
     updateUser = (name, email) => {
+      console.log(name, email)
       const jwt = localStorage.getItem("jwt");
       return fetch(`${this._address}/users/me`, {
         method: 'PATCH',
@@ -144,6 +146,7 @@ export default class Api {
 
 const mainApi = new Api({
     address: 'https://api.movie.nomoredomains.work',
+    //address: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json'
       }

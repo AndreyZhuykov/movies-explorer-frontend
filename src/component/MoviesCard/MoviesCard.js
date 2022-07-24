@@ -46,6 +46,9 @@ function MoviesCard(props) {
         if(movie.nameEN === ""){
             movie.nameEN = movie.nameRU;
         }
+        if(movie.country === null){
+            movie.country = "unknown";
+        }
         props.saveMovie(movie);
     } 
 
