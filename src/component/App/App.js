@@ -108,6 +108,7 @@ function App() {
     }
 
     const updateSaveMovieQuery = (query) => {
+        console.log(query)
         query = query.toLowerCase()
         setSaveMovieQuery(query)
         localStorage.setItem('saveMovieQuery', query)
@@ -267,6 +268,7 @@ function App() {
                 setName(users.user.name)
                 setEmail(users.user.email)
                 updateSaveMovies(movies.data) 
+                updateSaveMovieQuery('')
 
             }).catch((err) => {
                 console.log(`Ошибка получения данных с сервера: ${err}`);
@@ -304,6 +306,8 @@ function App() {
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
+
+    console.log(saveMovieQuery)
 
     return(
         <CurrentUserContext.Provider value={currentUser}>
