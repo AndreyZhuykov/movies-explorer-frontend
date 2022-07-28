@@ -268,8 +268,6 @@ function App() {
                 setName(users.user.name)
                 setEmail(users.user.email)
                 updateSaveMovies(movies.data) 
-                updateSaveMovieQuery('')
-
             }).catch((err) => {
                 console.log(`Ошибка получения данных с сервера: ${err}`);
             })
@@ -287,6 +285,7 @@ function App() {
                             setIsLoggedIn(true)
                             setIsLoading(false)
                             setFilterSaveMovies(saveMovies)
+                            setSaveMovieQuery('')
                         }
                     })
                     .catch((err) => {
