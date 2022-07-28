@@ -306,8 +306,6 @@ function App() {
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
 
-    console.log(saveMovieQuery)
-
     return(
         <CurrentUserContext.Provider value={currentUser}>
             <div className='app'>
