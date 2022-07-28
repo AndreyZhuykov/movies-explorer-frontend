@@ -2,8 +2,6 @@ import React from 'react';
 
 function NavTab() {
 
-    console.log()
-
     return(
         <nav className='nav-tab'>
             <a className='nav-tab__button' href='#about-project'>О проекте</a>

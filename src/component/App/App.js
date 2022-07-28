@@ -39,7 +39,7 @@ window.onresize = () => {
 
 onResize();
 
-function delay(time = 1500) {
+function delay(time = 2000) {
     return new Promise((resolve) => {
         console.log(resolve)
       setTimeout(resolve, time);
@@ -79,6 +79,7 @@ function App() {
     }
 
     const updateFilterMovies = (movies) => {
+        console.log(movies)
         setFilterMovies(movies)
         localStorage.setItem('filter_movies', JSON.stringify(movies));
     }
@@ -135,9 +136,10 @@ function App() {
     function handleSubmitForSave(e) {
         setIsLoading(true)
         e.preventDefault()
-        if(query.length) {
-            const filterMovies = saveMovies.filter((movie) => 
-                movie.nameRU.toLowerCase().indexOf(query) >= 0
+        if(saveMovieQuery.length) {
+            const filterMovies = saveMovies.filter((movie) => {
+                return movie.nameRU.toLowerCase().indexOf(saveMovieQuery) >= 0
+            }
             );
             if (filterMovies.length === 0) {
                 setSaveMovieNotFound(true)
@@ -245,7 +247,6 @@ function App() {
         if(!movies.length) {
             moviesApi().then((movies) => {
                 updateMovies(movies);
-                updateFilterMovies([]);
             }).catch((err) => {
                 console.log(`Ошибка загрузки фильмов с сервера: ${err}`)
             })
@@ -303,7 +304,7 @@ function App() {
 
     const userSaveMovie = saveMovies.filter(m => m.owner === currentUser._id)
     const userfilterSaveMovie = filterSaveMovies.filter(m => m.owner === currentUser._id)
-    
+
     return(
         <CurrentUserContext.Provider value={currentUser}>
             <div className='app'>
